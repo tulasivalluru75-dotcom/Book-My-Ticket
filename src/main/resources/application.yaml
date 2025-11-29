@@ -1,10 +1,10 @@
 server:
-  port:80
+  port: 80
 spring:
   application:
     name: Book-My-Ticket
   datasource:
-    url: jdbc:mysql://localhost:3306/Book-My-Ticket.?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/Book-My-Ticket?createDatabaseIfNotExist=true
     username: root
     password: root
   jpa:
@@ -17,3 +17,17 @@ spring:
   data:
     redis:
       url: redis://localhost:6379
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tulasivalluru75@gmail.com
+    password: ${App_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true					  
+admin:
+  email: admin@gmail.com
+  password: admin1234
