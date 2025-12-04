@@ -1,5 +1,6 @@
 package com.jsp.Book_My_Ticket.dto;
 
+
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
+
 public class UserDto {
 	@Size(min = 3, max = 25, message = "* Enter between 3 ~ 25 Charecters")
 	private String name;

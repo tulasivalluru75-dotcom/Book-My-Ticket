@@ -1,27 +1,40 @@
 package com.jsp.Book_My_Ticket.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.SecureRandom;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.List;
 
+import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.jsp.Book_My_Ticket.dto.LoginDto;
+import com.jsp.Book_My_Ticket.dto.PasswordDto;
+import com.jsp.Book_My_Ticket.dto.TheaterDto;
 import com.jsp.Book_My_Ticket.dto.UserDto;
+import com.jsp.Book_My_Ticket.entity.Theater;
 import com.jsp.Book_My_Ticket.entity.User;
+import com.jsp.Book_My_Ticket.repository.TheaterRepository;
 import com.jsp.Book_My_Ticket.repository.UserRepository;
 import com.jsp.Book_My_Ticket.util.AES;
-import com.jsp.Book_My_Ticket.util.EmailHealper;
+import com.jsp.Book_My_Ticket.util.EmailHelper;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
+
 	private final UserRepository userRepository;
 	private final SecureRandom random;
-	private final EmailHealper emailHealper;
+	private final EmailHelper emailHelper;
 	private final RedisService redisService;
+	private final TheaterRepository theaterRepository;
 
 	@Override
 	public String register(UserDto userDto, BindingResult result, RedirectAttributes attributes) {
@@ -32,29 +45,33 @@ public class UserServiceImpl implements UserService{
 			result.rejectValue("email", "error.email", "* Email Should be unique");
 		if (userRepository.existsByMobile(userDto.getMobile()))
 			result.rejectValue("mobile", "error.mobile", "* Mobile Number Should be unique");
-		
+
 		if (result.hasErrors())
 			return "register.html";
+
 		else {
-			int otp=random.nextInt(100000,1000000);
-			emailHealper.sendOtp(otp,userDto.getName(),userDto.getEmail());
+			int otp = random.nextInt(100000, 1000000);
+			emailHelper.sendOtp(otp, userDto.getName(), userDto.getEmail());
 			redisService.saveUserDto(userDto.getEmail(), userDto);
 			redisService.saveOtp(userDto.getEmail(), otp);
 			attributes.addFlashAttribute("pass", "Otp Sent Success");
 			attributes.addFlashAttribute("email", userDto.getEmail());
 			return "redirect:/otp";
-		
 		}
 	}
 
 	@Override
-	public String login(LoginDto dto, RedirectAttributes attributes,HttpSession session) {
+	public String login(LoginDto dto, RedirectAttributes attributes, HttpSession session) {
 		User user = userRepository.findByEmail(dto.getEmail());
 		if (user == null) {
 			attributes.addFlashAttribute("fail", "Invalid Email");
 			return "redirect:/login";
 		} else {
 			if (AES.decrypt(user.getPassword()).equals(dto.getPassword())) {
+				if (user.isBlocked()) {
+					attributes.addFlashAttribute("fail", "Account Blocked!, Contact Admin");
+					return "redirect:/login";
+				}
 				session.setAttribute("user", user);
 				attributes.addFlashAttribute("pass", "Login Success");
 				return "redirect:/main";
@@ -71,7 +88,7 @@ public class UserServiceImpl implements UserService{
 		attributes.addFlashAttribute("pass", "Logout Success");
 		return "redirect:/main";
 	}
-	
+
 	@Override
 	public String submitOtp(int otp, String email, RedirectAttributes attributes) {
 		UserDto dto = redisService.getDtoByEmail(email);
@@ -87,7 +104,7 @@ public class UserServiceImpl implements UserService{
 			} else {
 				if (otp == exOtp) {
 					User user = new User(null, dto.getName(), dto.getEmail(), dto.getMobile(),
-							AES.encrypt(dto.getPassword()), "USER");
+							AES.encrypt(dto.getPassword()), "USER", false);
 					userRepository.save(user);
 					attributes.addFlashAttribute("pass", "Account Registered Success");
 					return "redirect:/main";
@@ -100,6 +117,198 @@ public class UserServiceImpl implements UserService{
 			}
 		}
 	}
-	
-	
+
+	@Override
+	public String resendOtp(String email, RedirectAttributes attributes) {
+		UserDto dto = redisService.getDtoByEmail(email);
+		if (dto == null) {
+			attributes.addFlashAttribute("fail", "Timeout Try Again Creating a New Account");
+			return "redirect:/register";
+		} else {
+			int otp = random.nextInt(100000, 1000000);
+			emailHelper.sendOtp(otp, dto.getName(), dto.getEmail());
+			redisService.saveOtp(dto.getEmail(), otp);
+			attributes.addFlashAttribute("pass", "Otp Re-Sent Success");
+			attributes.addFlashAttribute("email", dto.getEmail());
+			return "redirect:/otp";
+		}
+	}
+
+	@Override
+	public String forgotPassword(String email, RedirectAttributes attributes) {
+		User user = userRepository.findByEmail(email);
+		if (user == null) {
+			attributes.addFlashAttribute("fail", "Invalid Email");
+			return "redirect:/forgot-password";
+		} else {
+			int otp = random.nextInt(100000, 1000000);
+			emailHelper.sendOtp(otp, user.getName(), email);
+			redisService.saveOtp(email, otp);
+			attributes.addFlashAttribute("pass", "Sent Success");
+			attributes.addFlashAttribute("email", email);
+			return "redirect:/reset-password";
+		}
+	}
+
+	@Override
+	public String resetPassword(PasswordDto passwordDto, BindingResult result, RedirectAttributes attributes,
+			ModelMap map) {
+		if (result.hasErrors()) {
+			map.put("email", passwordDto.getEmail());
+			return "reset-password.html";
+		}
+		User user = userRepository.findByEmail(passwordDto.getEmail());
+		if (user == null) {
+			attributes.addFlashAttribute("fail", "Invalid Email");
+			return "redirect:/forgot-password";
+		} else {
+			int exOtp = redisService.getOtpByEmail(passwordDto.getEmail());
+			if (exOtp == 0) {
+				attributes.addFlashAttribute("fail", "OTP Expired, Resend Otp and Try Again");
+				attributes.addFlashAttribute("email", passwordDto.getEmail());
+				return "redirect:/reset-password";
+			} else {
+				if (passwordDto.getOtp() == exOtp) {
+					user.setPassword(AES.encrypt(passwordDto.getPassword()));
+					userRepository.save(user);
+					attributes.addFlashAttribute("pass", "Password Reset Success");
+					return "redirect:/main";
+
+				} else {
+					attributes.addFlashAttribute("fail", "Invalid OTP Try Again");
+					attributes.addFlashAttribute("email", passwordDto.getEmail());
+					return "redirect:/reset-password";
+				}
+			}
+
+		}
+	}
+
+	@Override
+	public String manageUsers(HttpSession session, RedirectAttributes attributes, ModelMap map) {
+		User user = getUserFromSession(session);
+		if (user == null || !user.getRole().equals("ADMIN")) {
+			attributes.addFlashAttribute("fail", "Invalid Session");
+			return "redirect:/login";
+		} else {
+			List<User> users = userRepository.findByRole("USER");
+			if (users.isEmpty()) {
+				attributes.addFlashAttribute("fail", "No Users Registered Yet");
+				return "redirect:/";
+			} else {
+				map.put("users", users);
+				return "manage-users.html";
+			}
+		}
+	}
+
+	@Override
+	public String blockUser(Long id, HttpSession session, RedirectAttributes attributes) {
+		User user = getUserFromSession(session);
+		if (user == null || !user.getRole().equals("ADMIN")) {
+			attributes.addFlashAttribute("fail", "Invalid Session");
+			return "redirect:/login";
+		} else {
+			User user1 = userRepository.findById(id).orElse(null);
+			if (user1 == null) {
+				attributes.addFlashAttribute("fail", "Invalid Session");
+				return "redirect:/login";
+			}
+			user1.setBlocked(true);
+			userRepository.save(user1);
+			attributes.addFlashAttribute("pass", "Blocked Success");
+			return "redirect:/manage-users";
+		}
+	}
+
+	@Override
+	public String unBlockUser(Long id, HttpSession session, RedirectAttributes attributes) {
+		User user = getUserFromSession(session);
+		if (user == null || !user.getRole().equals("ADMIN")) {
+			attributes.addFlashAttribute("fail", "Invalid Session");
+			return "redirect:/login";
+		} else {
+			User user1 = userRepository.findById(id).orElse(null);
+			if (user1 == null) {
+				attributes.addFlashAttribute("fail", "Invalid Session");
+				return "redirect:/login";
+			}
+			user1.setBlocked(false);
+			userRepository.save(user1);
+			attributes.addFlashAttribute("pass", "Un-Blocked Success");
+			return "redirect:/manage-users";
+		}
+	}
+
+	private User getUserFromSession(HttpSession session) {
+		return (User) session.getAttribute("user");
+	}
+
+	@Override
+	public String manageTheater(ModelMap map, RedirectAttributes attributes, HttpSession session) {
+		User user = getUserFromSession(session);
+		if (user == null || !user.getRole().equals("ADMIN")) {
+			attributes.addFlashAttribute("fail", "Invalid Session");
+			return "redirect:/login";
+		} else {
+			List<Theater> theaters = theaterRepository.findAll();
+			map.put("theaters", theaters);
+			return "manage-theaters.html";
+		}
+	}
+
+	@Override
+	public String loadAddTheater(HttpSession session, RedirectAttributes attributes, TheaterDto theaterDto) {
+		User user = getUserFromSession(session);
+		if (user == null || !user.getRole().equals("ADMIN")) {
+			attributes.addFlashAttribute("fail", "Invalid Session");
+			return "redirect:/login";
+		} else {
+			return "add-theater.html";
+		}
+	}
+
+	@Override
+	public String addTheater(HttpSession session, RedirectAttributes attributes, @Valid TheaterDto theaterDto,
+			BindingResult result) throws IOException {
+		User user = getUserFromSession(session);
+		if (user == null || !user.getRole().equals("ADMIN")) {
+			attributes.addFlashAttribute("fail", "Invalid Session");
+			return "redirect:/login";
+		}
+
+		if (theaterRepository.existsByNameAndAddress(theaterDto.getName(), theaterDto.getAddress())) {
+			result.rejectValue("name", "error.name", "* Theater Already Exists");
+		}
+
+		MultipartFile image = theaterDto.getImage();
+		if (image.isEmpty()) {
+			result.rejectValue("image", "error.image", "* Image is Required");
+		}
+
+		if (result.hasErrors()) {
+			return "add-theater.html";
+		}
+
+		String baseUploadDir = System.getProperty("user.dir") + "/uploads/theaters/";
+		File directory = new File(baseUploadDir);
+		if (!directory.exists())
+			directory.mkdirs();
+
+		String filename = theaterDto.getName() + image.getOriginalFilename();
+		File destination = new File(directory, filename);
+		image.transferTo(destination);
+
+		Theater theater = new Theater();
+		theater.setName(theaterDto.getName());
+		theater.setAddress(theaterDto.getAddress());
+		theater.setLocationLink(theaterDto.getLocationLink());
+		theater.setImageLocation("/uploads/theaters/" + filename);
+
+		theaterRepository.save(theater);
+
+		attributes.addFlashAttribute("pass", "Theater Added Successfully");
+		return "redirect:/manage-theaters";
+	}
+
 }

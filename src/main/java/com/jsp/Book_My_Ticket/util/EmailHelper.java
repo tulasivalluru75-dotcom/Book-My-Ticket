@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class EmailHealper {
+public class EmailHelper {
 	private final JavaMailSender mailSender;
 	private final TemplateEngine templateEngine;
 

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Book My Ticket — Error</title>
+<style>
+    * {
+        margin: 0; padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", Arial, sans-serif;
+    }
+
+    body {
+        background: #f4f5f7;
+    }
+
+    /* Header like BookMyShow */
+    .header {
+        width: 100%;
+        background: #1f1f1f;
+        color: white;
+        padding: 14px 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: 700;
+        color: #ff2e63;
+        text-decoration: none;
+    }
+
+    .nav {
+        display: flex;
+        gap: 20px;
+    }
+
+    .nav a {
+        color: #ddd;
+        text-decoration: none;
+        font-size: 15px;
+        transition: 0.2s;
+    }
+
+    .nav a:hover {
+        color: white;
+    }
+
+    /* Center card */
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 70px);
+        padding: 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 40px 35px;
+        width: 100%;
+        max-width: 520px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+        font-size: 26px;
+        margin-bottom: 16px;
+        color: #333;
+    }
+
+    p {
+        color: #666;
+        margin-bottom: 24px;
+        font-size: 15px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 12px 22px;
+        background: #ff2e63;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.2s;
+    }
+
+    .btn:hover {
+        background: #e02053;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Header -->
+<div class="header">
+    <a href="/" class="logo">BookMyTicket</a>
+
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/movies">Movies</a>
+        <a href="/events">Events</a>
+        <a href="/contact">Contact</a>
+    </div>
+</div>
+
+<!-- Error Content -->
+<div class="container">
+    <div class="card">
+        <h1>Sorry, Page is Under Maintenance</h1>
+        <p>The page you're looking for is still loading or not available right now. Please try again shortly.</p>
+
+        <a href="/" class="btn">Click for Home</a>
+    </div>
+</div>
+
+</body>
+</html>
