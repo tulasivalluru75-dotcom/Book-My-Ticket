@@ -25,20 +25,26 @@
 		}
 
 		body {
-			font-family: 'Poppins', sans-serif;
-			background: linear-gradient(135deg, #f0f4f8 0%, #e8f0f7 50%, #f0f4f8 100%);
-			color: #1a2332;
-			overflow-x: hidden;
-			min-height: 100vh;
-		}
-
+font-family: 'Poppins', sans-serif;
+background: url('https://wallpapers.com/images/hd/movie-theater-background-5500-x-5500-c02ch5zs2vi24vv9.jpg') no-repeat center center/cover;
+color: #eaefff;
+backdrop-filter: blur(3px);
+min-height: 100vh;
+background-size: auto-fit;
+}
+.navbar-brand { color: #bcd9ff !important; }
+.hero h1 { color: #ffffff; text-shadow: 0 0 12px rgba(255,255,255,0.4); }
+.hero p { color: #d6e4ff; }
+#movies h2 { color: #e3eeff; }
+.movie-card h5 { color: #f8fcff; }
+.movie-card .text-muted { color: #d0dcf0 !important; }
 		/* ========== NAVBAR ========== */
 		.navbar {
-			background: rgba(255, 255, 255, 0.96) !important;
-			backdrop-filter: blur(20px);
+			background: rgba(10, 12, 16, 0.92) !important;
+			backdrop-filter: blur(6px);
 			padding: 0.8rem 2rem;
-			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-			border-bottom: 1px solid rgba(100, 150, 255, 0.15);
+			box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 			position: sticky;
 			top: 0;
 			z-index: 1000;
@@ -48,7 +54,8 @@
 			font-weight: 900;
 			font-size: 1.6rem;
 			letter-spacing: 1px;
-			background: linear-gradient(135deg, #6496ff 0%, #ff4081 50%, #00bcd4 100%);
+			/* darker neon gradient but clipped to text */
+			background: linear-gradient(135deg, #6ab0ff 0%, #9b59ff 50%, #ff7eb6 100%);
 			-webkit-background-clip: text;
 			-webkit-text-fill-color: transparent;
 			background-clip: text;
@@ -56,11 +63,11 @@
 		}
 
 		.navbar-toggler {
-			border-color: rgba(100, 150, 255, 0.5) !important;
+			border-color: rgba(255, 255, 255, 0.06) !important;
 		}
 
 		.navbar-toggler-icon {
-			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28100, 150, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28186, 199, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
 		}
 
 		.nav-link,
@@ -70,12 +77,12 @@
 
 		/* ========== HERO SECTION ========== */
 		.hero {
-			background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 50%, #e8f0f7 100%);
+			background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 40%, transparent 100%);
 			padding: 100px 0;
 			position: relative;
 			text-align: center;
-			color: #1a2332;
-			border-bottom: 1px solid rgba(100, 150, 255, 0.15);
+			color: #f3f7fb;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 			overflow: hidden;
 		}
 
@@ -84,13 +91,12 @@
 			position: absolute;
 			inset: 0;
 			background:
-				radial-gradient(circle at 20% 50%, rgba(100, 150, 255, 0.15) 0%, transparent 50%),
-				radial-gradient(circle at 80% 80%, rgba(255, 64, 129, 0.1) 0%, transparent 50%);
+				radial-gradient(circle at 18% 40%, rgba(106, 176, 255, 0.06) 0%, transparent 45%),
+				radial-gradient(circle at 80% 80%, rgba(155, 89, 255, 0.04) 0%, transparent 50%);
 			animation: pulse-glow 6s ease-in-out infinite;
 		}
 
 		@keyframes pulse-glow {
-
 			0%,
 			100% {
 				opacity: 0.7;
@@ -110,7 +116,8 @@
 		.hero h1 {
 			font-size: 2.8rem;
 			font-weight: 900;
-			background: linear-gradient(135deg, #6496ff 0%, #2d5bff 50%, #ff4081 100%);
+			/* neon-ish gradient for dark theme */
+			background: linear-gradient(135deg, #6ab0ff 0%, #2d5bff 50%, #ff7eb6 100%);
 			-webkit-background-clip: text;
 			-webkit-text-fill-color: transparent;
 			background-clip: text;
@@ -120,7 +127,7 @@
 
 		.hero p {
 			font-size: 1.1rem;
-			color: #5a6b7d;
+			color: #b8c7d9;
 			margin-bottom: 1.8rem;
 			font-weight: 500;
 		}
@@ -132,19 +139,19 @@
 		/* ========== MOVIES SECTION ========== */
 		#movies {
 			padding: 60px 0;
-			background: linear-gradient(to bottom, #ffffff 0%, #f8fafb 100%);
+			background: transparent;
 			position: relative;
 		}
 
 		#movies h2 {
-			color: #1a2332;
+			color: #f3f7fb;
 			margin-bottom: 2.5rem;
 			font-size: 2.2rem;
 			font-weight: 900;
 			position: relative;
 			display: inline-block;
 			width: 100%;
-			background: linear-gradient(135deg, #6496ff 0%, #2d5bff 50%, #ff4081 100%);
+			background: linear-gradient(135deg, #6ab0ff 0%, #8a63ff 50%, #ff7eb6 100%);
 			-webkit-background-clip: text;
 			-webkit-text-fill-color: transparent;
 			background-clip: text;
@@ -159,20 +166,21 @@
 			transform: translateX(-50%);
 			width: 80px;
 			height: 3px;
-			background: linear-gradient(90deg, #6496ff 0%, #ff4081 50%, #00bcd4 100%);
+			background: linear-gradient(90deg, #6ab0ff 0%, #ff7eb6 50%, #00bcd4 100%);
 			border-radius: 2px;
-			box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+			box-shadow: 0 0 18px rgba(106, 176, 255, 0.12);
 		}
 
 		/* ========== MOVIE CARDS ========== */
 		.movie-card {
 			border-radius: 14px;
 			overflow: hidden;
-			background: linear-gradient(135deg, rgba(100, 150, 255, 0.08) 0%, rgba(255, 64, 129, 0.04) 100%);
-			backdrop-filter: blur(10px);
+			/* darker glass look */
+			background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%);
+			backdrop-filter: blur(8px) saturate(1.1);
 			transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-			border: 1px solid rgba(100, 150, 255, 0.2);
-			box-shadow: 0 4px 20px rgba(100, 150, 255, 0.08);
+			border: 1px solid rgba(255,255,255,0.04);
+			box-shadow: 0 10px 30px rgba(2,6,23,0.6);
 			position: relative;
 			display: flex;
 			flex-direction: column;
@@ -183,16 +191,16 @@
 			content: "";
 			position: absolute;
 			inset: 0;
-			background: linear-gradient(135deg, rgba(100, 200, 255, 0.05) 0%, transparent 100%);
+			background: linear-gradient(135deg, rgba(106, 176, 255, 0.02) 0%, transparent 100%);
 			z-index: 1;
 			pointer-events: none;
 		}
 
 		.movie-card:hover {
 			transform: translateY(-10px);
-			box-shadow: 0 12px 35px rgba(100, 150, 255, 0.2);
-			border-color: rgba(100, 150, 255, 0.4);
-			background: linear-gradient(135deg, rgba(100, 150, 255, 0.12) 0%, rgba(255, 64, 129, 0.08) 100%);
+			box-shadow: 0 18px 45px rgba(2,6,23,0.75);
+			border-color: rgba(106, 176, 255, 0.12);
+			background: linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.01) 100%);
 		}
 
 		.movie-card img {
@@ -201,26 +209,27 @@
 			transition: all 0.5s ease;
 			position: relative;
 			z-index: 0;
+			filter: saturate(1.05) contrast(1) brightness(0.96);
 		}
 
 		.movie-card:hover img {
-			transform: scale(1.1);
-			filter: brightness(0.95) contrast(1.05);
+			transform: scale(1.06);
+			filter: brightness(0.92) contrast(1.03);
 		}
 
 		.movie-card .card-body {
 			padding: 1.3rem;
-			background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(240, 244, 248, 0.6) 100%);
+			background: transparent;
 			flex-grow: 1;
 			display: flex;
 			flex-direction: column;
 			position: relative;
 			z-index: 2;
-			border-top: 1px solid rgba(100, 150, 255, 0.15);
+			border-top: 1px solid rgba(255,255,255,0.02);
 		}
 
 		.movie-card h5 {
-			color: #2d5bff;
+			color: #dff1ff;
 			margin-bottom: 0.5rem;
 			font-weight: 700;
 			font-size: 1.05rem;
@@ -228,7 +237,7 @@
 		}
 
 		.movie-card .text-muted {
-			color: #7a8fa3 !important;
+			color: #9fb2c9 !important;
 			font-size: 0.85rem;
 			margin-bottom: 1rem;
 			font-weight: 500;
@@ -255,7 +264,7 @@
 			content: "";
 			position: absolute;
 			inset: 0;
-			background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+			background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
 			opacity: 0;
 			transition: opacity 0.3s ease;
 			z-index: 1;
@@ -266,71 +275,68 @@
 		}
 
 		.btn-primary {
-			background: linear-gradient(135deg, #6496ff 0%, #ff4081 100%);
+			/* deep gradient for primary */
+			background: linear-gradient(135deg, #4d8cff 0%, #8855ff 100%);
 			border: none;
-			color: #fff;
-			box-shadow: 0 4px 15px rgba(100, 150, 255, 0.3);
+			color: #0b0c0f;
+			box-shadow: 0 6px 18px rgba(77,140,255,0.18);
 			position: relative;
 			z-index: 0;
 		}
 
 		.btn-primary:hover {
-			box-shadow: 0 8px 25px rgba(100, 150, 255, 0.4);
+			box-shadow: 0 12px 30px rgba(137,85,255,0.22);
 			transform: translateY(-2px);
-			color: #fff;
-		}
-
-		.btn-primary:active {
-			transform: translateY(0);
+			color: #0b0c0f;
 		}
 
 		.btn-outline-light {
-			color: #2d5bff;
-			border: 2px solid rgba(100, 150, 255, 0.4);
-			background: rgba(255, 255, 255, 0.8);
+			color: #cfe7ff;
+			border: 2px solid rgba(207,231,255,0.06);
+			background: rgba(255, 255, 255, 0.02);
 			font-weight: 700;
 		}
 
 		.btn-outline-light:hover {
-			background: linear-gradient(135deg, #6496ff 0%, #ff4081 100%);
-			border-color: #6496ff;
-			color: #fff;
-			box-shadow: 0 4px 15px rgba(100, 150, 255, 0.3);
+			background: linear-gradient(135deg, #6ab0ff 0%, #ff7eb6 100%);
+			border-color: #6ab0ff;
+			color: #0b0c0f;
+			box-shadow: 0 6px 20px rgba(106,176,255,0.12);
 		}
 
 		.btn-warning {
-			background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+			background: linear-gradient(135deg, #ffb74d 0%, #ff8a65 100%);
 			border: none;
-			color: #1a2332;
+			color: #0b0c0f;
 			font-weight: 700;
-			box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+			box-shadow: 0 6px 18px rgba(255,183,77,0.12);
 		}
 
 		.btn-warning:hover {
-			box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+			box-shadow: 0 12px 30px rgba(255,183,77,0.18);
 			transform: translateY(-2px);
-			color: #1a2332;
+			color: #0b0c0f;
 		}
 
 		.btn-danger {
-			background: linear-gradient(135deg, #ff4081 0%, #ff6a6a 100%);
+			background: linear-gradient(135deg, #ff6b9a 0%, #ff7b7b 100%);
 			border: none;
-			box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
-			color: #fff;
+			box-shadow: 0 6px 18px rgba(255,107,154,0.12);
+			color: #0b0c0f;
 		}
 
 		.btn-danger:hover {
-			box-shadow: 0 8px 25px rgba(255, 64, 129, 0.4);
+			box-shadow: 0 12px 30px rgba(255,107,154,0.18);
 			transform: translateY(-2px);
 		}
 
 		/* ========== FOOTER ========== */
 		footer {
-			background: linear-gradient(135deg, #e8f0f7 0%, #f0f4f8 100%);
+			background: transparent;
 			padding: 2rem 0 1.2rem;
-			color: #5a6b7d;
+			color: #9fb2c9;
 			text-align: center;
-			border-top: 1px solid rgba(100, 150, 255, 0.15);
+			border-top: 1px solid rgba(255,255,255,0.03);
 			margin-top: 3rem;
 			position: relative;
 		}
@@ -342,7 +348,7 @@
 			left: 0;
 			right: 0;
 			height: 1px;
-			background: linear-gradient(90deg, transparent, rgba(100, 150, 255, 0.2), transparent);
+			background: linear-gradient(90deg, transparent, rgba(106,176,255,0.06), transparent);
 		}
 
 		footer p {
@@ -351,6 +357,7 @@
 			position: relative;
 			z-index: 1;
 			font-size: 0.95rem;
+			color: #9fb2c9;
 		}
 
 		/* ========== ANIMATIONS ========== */
@@ -407,16 +414,16 @@
 			display: flex;
 			align-items: center;
 			gap: 12px;
-			box-shadow: 0 8px 25px rgba(100, 150, 255, 0.25);
+			box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
 			margin-bottom: 14px;
 			pointer-events: auto;
 			animation: toastSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 			position: relative;
 			overflow: visible;
-			backdrop-filter: blur(15px);
+			backdrop-filter: blur(10px);
 			font-size: 0.95rem;
 			line-height: 1.4;
-			border: 1px solid rgba(255, 255, 255, 0.3);
+			border: 1px solid rgba(255, 255, 255, 0.03);
 		}
 
 		.toastify::before {
@@ -436,26 +443,26 @@
 			bottom: 0;
 			left: 0;
 			height: 2px;
-			background: rgba(255, 255, 255, 0.5);
+			background: rgba(255, 255, 255, 0.06);
 			animation: progressBar 3.5s linear forwards;
 		}
 
 		.toastify.success {
-			background: linear-gradient(135deg, #26c281 0%, #27ae60 100%);
+			background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
 		}
 
 		.toastify.success::before {
-			background: #1e8449;
-			box-shadow: 0 0 20px rgba(38, 194, 129, 0.4);
+			background: #13846f;
+			box-shadow: 0 0 20px rgba(26, 188, 156, 0.18);
 		}
 
 		.toastify.error {
-			background: linear-gradient(135deg, #ff4081 0%, #ff6a6a 100%);
+			background: linear-gradient(135deg, #ff6b9a 0%, #ff7b7b 100%);
 		}
 
 		.toastify.error::before {
-			background: #d90047;
-			box-shadow: 0 0 20px rgba(255, 64, 129, 0.4);
+			background: #c2364a;
+			box-shadow: 0 0 20px rgba(255, 107, 154, 0.18);
 		}
 
 		.toastify span {
@@ -468,7 +475,7 @@
 			width: 28px;
 			height: 28px;
 			border-radius: 50%;
-			background: rgba(255, 255, 255, 0.2);
+			background: rgba(255, 255, 255, 0.06);
 			border: none;
 			color: white;
 			font-size: 1.2rem;
@@ -482,7 +489,7 @@
 		}
 
 		.toastify-close:hover {
-			background: rgba(255, 255, 255, 0.35);
+			background: rgba(255, 255, 255, 0.12);
 			transform: rotate(90deg);
 		}
 
@@ -681,7 +688,7 @@
 			<!-- Avengers -->
 			<div class="col-lg-3 col-md-4 col-sm-6">
 				<div class="movie-card">
-					<img src="https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg">
+					<img src="https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg" alt="Avengers poster">
 					<div class="card-body">
 						<h5 class="fw-semibold">Avengers: Endgame</h5>
 						<p class="text-muted small">Action • 3h 1m</p>
@@ -693,7 +700,7 @@
 			<!-- Interstellar -->
 			<div class="col-lg-3 col-md-4 col-sm-6">
 				<div class="movie-card">
-					<img src="https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg">
+					<img src="https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg" alt="Interstellar poster">
 					<div class="card-body">
 						<h5 class="fw-semibold">Interstellar</h5>
 						<p class="text-muted small">Sci-Fi • 2h 49m</p>
@@ -705,7 +712,7 @@
 			<!-- Inception -->
 			<div class="col-lg-3 col-md-4 col-sm-6">
 				<div class="movie-card">
-					<img src="https://image.tmdb.org/t/p/w500/edv5CZvWj09upOsy2Y6IwDhK8bt.jpg">
+					<img src="https://image.tmdb.org/t/p/w500/edv5CZvWj09upOsy2Y6IwDhK8bt.jpg" alt="Inception poster">
 					<div class="card-body">
 						<h5 class="fw-semibold">Inception</h5>
 						<p class="text-muted small">Thriller • 2h 28m</p>
@@ -717,7 +724,7 @@
 			<!-- Joker -->
 			<div class="col-lg-3 col-md-4 col-sm-6">
 				<div class="movie-card">
-					<img src="https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg">
+					<img src="https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg" alt="Joker poster">
 					<div class="card-body">
 						<h5 class="fw-semibold">Joker</h5>
 						<p class="text-muted small">Drama • 2h 2m</p>
