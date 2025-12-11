@@ -11,18 +11,22 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.jsp.Book_My_Ticket.dto.LoginDto;
+import com.jsp.Book_My_Ticket.dto.MovieDto;
 import com.jsp.Book_My_Ticket.dto.PasswordDto;
 import com.jsp.Book_My_Ticket.dto.Screendto;
 import com.jsp.Book_My_Ticket.dto.TheaterDto;
 import com.jsp.Book_My_Ticket.dto.UserDto;
+import com.jsp.Book_My_Ticket.entity.Movie;
 import com.jsp.Book_My_Ticket.entity.Screen;
 import com.jsp.Book_My_Ticket.entity.Seat;
 import com.jsp.Book_My_Ticket.entity.Theater;
 import com.jsp.Book_My_Ticket.entity.User;
+import com.jsp.Book_My_Ticket.repository.MovieRepository;
 import com.jsp.Book_My_Ticket.repository.ScreenRepository;
 import com.jsp.Book_My_Ticket.repository.TheaterRepository;
 import com.jsp.Book_My_Ticket.repository.UserRepository;
 import com.jsp.Book_My_Ticket.util.AES;
+import com.jsp.Book_My_Ticket.util.CloudinaryHelper;
 import com.jsp.Book_My_Ticket.util.EmailHelper;
 
 import jakarta.servlet.http.HttpSession;
@@ -39,7 +43,9 @@ public class UserServiceImpl implements UserService {
 	private final EmailHelper emailHelper;
 	private final RedisService redisService;
 	private final TheaterRepository theaterRepository;
-	 private final ScreenRepository screenRepository; 
+	 private final ScreenRepository screenRepository;
+	 private final MovieRepository movieRepository;
+		private final CloudinaryHelper cloudinaryHelper;
 
 	@Override
 	public String register(UserDto userDto, BindingResult result, RedirectAttributes attributes) {
@@ -525,6 +531,58 @@ public class UserServiceImpl implements UserService {
 			Screen screen = screenRepository.findById(id).orElseThrow();
 			map.put("id", id);
 			return "add-seats.html";
+		}
+	}
+	
+	@Override
+	public String manageMovies(HttpSession session, RedirectAttributes attributes, ModelMap map) {
+		User user = getUserFromSession(session);
+		if (user == null || !user.getRole().equals("ADMIN")) {
+			attributes.addFlashAttribute("fail", "Invalid Session");
+			return "redirect:/login";
+		} else {
+			List<Movie> movies = movieRepository.findAll();
+			map.put("movies", movies);
+			return "manage-movies.html";
+		}
+	}
+
+	@Override
+	public String loadAddMovie(MovieDto movieDto, RedirectAttributes attributes, HttpSession session) {
+		User user = getUserFromSession(session);
+		if (user == null || !user.getRole().equals("ADMIN")) {
+			attributes.addFlashAttribute("fail", "Invalid Session");
+			return "redirect:/login";
+		} else {
+			return "add-movie.html";
+		}
+	}
+
+	@Override
+	public String addMovie(MovieDto movieDto, BindingResult result, RedirectAttributes attributes,
+			HttpSession session) {
+		User user = getUserFromSession(session);
+		if (user == null || !user.getRole().equals("ADMIN")) {
+			attributes.addFlashAttribute("fail", "Invalid Session");
+			return "redirect:/login";
+		} else {
+
+			if (movieRepository.existsByNameAndReleaseDate(movieDto.getName(), movieDto.getReleaseDate()))
+				result.rejectValue("name", "error.name", "* Movie Already Exists");
+			if (movieDto.getImage().getSize() == 0)
+				result.rejectValue("image", "error.image", "* Image is Required");
+			if (result.hasErrors())
+				return "add-movie.html";
+
+			Movie movie = new Movie(null, movieDto.getName(), movieDto.getLanguages(), movieDto.getGenre(),
+					movieDto.getDuration(), cloudinaryHelper.generateImageLink(movieDto.getImage()),
+					movieDto.getTrailerLink(), movieDto.getDescription(), movieDto.getReleaseDate(),
+					movieDto.getCast());
+
+			movieRepository.save(movie);
+			attributes.addFlashAttribute("pass", "Movie Added Success");
+			return "redirect:/manage-movies";
+
 		}
 	}
 

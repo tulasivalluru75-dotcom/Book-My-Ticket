@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jsp.Book_My_Ticket.dto.LoginDto;
+import com.jsp.Book_My_Ticket.dto.MovieDto;
 import com.jsp.Book_My_Ticket.dto.PasswordDto;
 import com.jsp.Book_My_Ticket.dto.Screendto;
 import com.jsp.Book_My_Ticket.dto.TheaterDto;
@@ -60,10 +61,16 @@ public interface UserService {
 
 	String editScreen(Long id, HttpSession session, RedirectAttributes attributes, ModelMap map);
 
-	String updateScreen(@Valid Screendto screenDto, Long id, BindingResult result, HttpSession session,
+	String updateScreen( Screendto screenDto, Long id, BindingResult result, HttpSession session,
 			RedirectAttributes attributes, ModelMap map);
 
 	String manageSeats(Long id, HttpSession session, ModelMap map, RedirectAttributes attributes);
 
 	String addSeats(Long id, HttpSession session, ModelMap map, RedirectAttributes attributes);
+	
+	String manageMovies(HttpSession session, RedirectAttributes attributes, ModelMap map);
+
+	String loadAddMovie(MovieDto movieDto, RedirectAttributes attributes, HttpSession session);
+
+	String addMovie(MovieDto movieDto, BindingResult result, RedirectAttributes attributes, HttpSession session);
 }
