@@ -148,12 +148,6 @@ public class UserController {
 		return userService.manageScreens(id, session, attributes, map);
 	}
 
-	@GetMapping("/add-screen/{id}")
-	public String addScreen(@PathVariable Long id, HttpSession session, RedirectAttributes attributes, ModelMap map,
-			Screen screenDto) {
-		return userService.addScreen(id, session, attributes, map, screenDto);
-	}
-
 	@PostMapping("/add-screen")
 	public String addScreen(@Valid Screendto screenDto, BindingResult result, HttpSession session,
 			RedirectAttributes attributes) {
