@@ -1,15 +1,15 @@
 package com.jsp.Book_My_Ticket.service;
 
 import java.io.IOException;
-
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.jsp.Book_My_Ticket.dto.LoginDto;
 import com.jsp.Book_My_Ticket.dto.MovieDto;
 import com.jsp.Book_My_Ticket.dto.PasswordDto;
 import com.jsp.Book_My_Ticket.dto.Screendto;
+import com.jsp.Book_My_Ticket.dto.SeatLayoutForm;
+import com.jsp.Book_My_Ticket.dto.ShowDto;
 import com.jsp.Book_My_Ticket.dto.TheaterDto;
 import com.jsp.Book_My_Ticket.dto.UserDto;
 
@@ -72,5 +72,15 @@ public interface UserService {
 
 	String loadAddMovie(MovieDto movieDto, RedirectAttributes attributes, HttpSession session);
 
-	String addMovie(MovieDto movieDto, BindingResult result, RedirectAttributes attributes, HttpSession session);
-}
+	String addMovie( MovieDto movieDto, BindingResult result, RedirectAttributes attributes, HttpSession session);
+
+	String saveSeats(Long id, SeatLayoutForm seatLayoutForm, HttpSession session, RedirectAttributes attributes);
+
+	String manageShows(Long id, ModelMap map, RedirectAttributes attributes, HttpSession session);
+
+	String addShow(Long id, ModelMap map, RedirectAttributes attributes, HttpSession session);
+
+	String addShow(ShowDto showDto, BindingResult result, RedirectAttributes attributes, HttpSession session);
+
+	String loadMain(ModelMap map);
+	}

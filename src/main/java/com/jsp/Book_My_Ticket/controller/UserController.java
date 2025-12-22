@@ -15,9 +15,10 @@ import com.jsp.Book_My_Ticket.dto.LoginDto;
 import com.jsp.Book_My_Ticket.dto.MovieDto;
 import com.jsp.Book_My_Ticket.dto.PasswordDto;
 import com.jsp.Book_My_Ticket.dto.Screendto;
+import com.jsp.Book_My_Ticket.dto.SeatLayoutForm;
+import com.jsp.Book_My_Ticket.dto.ShowDto;
 import com.jsp.Book_My_Ticket.dto.TheaterDto;
 import com.jsp.Book_My_Ticket.dto.UserDto;
-import com.jsp.Book_My_Ticket.entity.Screen;
 import com.jsp.Book_My_Ticket.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -31,8 +32,8 @@ public class UserController {
 	private final UserService userService;
 
 	@GetMapping({ "/", "/main" })
-	public String loadMain() {
-		return "main.html";
+	public String loadMain(ModelMap map) {
+		return userService.loadMain(map);
 	}
 
 	@GetMapping("/register")
@@ -120,7 +121,7 @@ public class UserController {
 	public String addTheater(TheaterDto theaterDto, RedirectAttributes attributes, HttpSession session) {
 		return userService.loadAddTheater(session, attributes, theaterDto);
 	}
-	
+
 	@PostMapping("/add-theater")
 	public String addTheater(@Valid TheaterDto theaterDto, BindingResult result, RedirectAttributes attributes,
 			HttpSession session) throws IOException {
@@ -139,7 +140,7 @@ public class UserController {
 
 	@PostMapping("/update-theater")
 	public String updateTheater(@Valid TheaterDto theaterDto, BindingResult result, RedirectAttributes attributes,
-			HttpSession session, @RequestParam("id") Long id) throws IOException {
+			HttpSession session, @RequestParam Long id) throws IOException {
 		return userService.updateTheater(session, attributes, theaterDto, result, id);
 	}
 
@@ -149,11 +150,18 @@ public class UserController {
 		return userService.manageScreens(id, session, attributes, map);
 	}
 
+	@GetMapping("/add-screen/{id}")
+	public String addScreen(@PathVariable Long id, HttpSession session, RedirectAttributes attributes, ModelMap map,
+			Screendto screenDto) {
+		return userService.addScreen(id, session, attributes, map, screenDto);
+	}
+
 	@PostMapping("/add-screen")
 	public String addScreen(@Valid Screendto screenDto, BindingResult result, HttpSession session,
 			RedirectAttributes attributes) {
 		return userService.addScreen(screenDto, result, session, attributes);
 	}
+
 	@GetMapping("/delete-screen/{id}")
 	public String deleteScreen(@PathVariable Long id, HttpSession session, RedirectAttributes attributes) {
 		return userService.deleteScreen(id, session, attributes);
@@ -169,6 +177,7 @@ public class UserController {
 			RedirectAttributes attributes, HttpSession session) {
 		return userService.updateScreen(screenDto, id, result, session, attributes, map);
 	}
+
 	@GetMapping("/manage-seats/{id}")
 	public String manageSeats(@PathVariable Long id, HttpSession session, ModelMap map, RedirectAttributes attributes) {
 		return userService.manageSeats(id, session, map, attributes);
@@ -177,6 +186,12 @@ public class UserController {
 	@GetMapping("/add-seats/{id}")
 	public String addSeats(@PathVariable Long id, HttpSession session, ModelMap map, RedirectAttributes attributes) {
 		return userService.addSeats(id, session, map, attributes);
+	}
+
+	@PostMapping("/add-seats/{id}")
+	public String saveSeats(@PathVariable Long id, SeatLayoutForm seatLayoutForm, HttpSession session,
+			RedirectAttributes attributes) {
+		return userService.saveSeats(id, seatLayoutForm, session, attributes);
 	}
 
 	@GetMapping("/manage-movies")
@@ -190,8 +205,24 @@ public class UserController {
 	}
 
 	@PostMapping("/add-movie")
-	public String addMovie(@Valid MovieDto movieDto,BindingResult result ,RedirectAttributes attributes, HttpSession session) {
-		return userService.addMovie(movieDto,result, attributes, session);
+	public String addMovie(@Valid MovieDto movieDto, BindingResult result, RedirectAttributes attributes,
+			HttpSession session) {
+		return userService.addMovie(movieDto, result, attributes, session);
 	}
-	
+
+	@GetMapping("/manage-shows/{id}")
+	public String manageShows(@PathVariable Long id, ModelMap map, RedirectAttributes attributes, HttpSession session) {
+		return userService.manageShows(id, map, attributes, session);
+	}
+
+	@GetMapping("/add-show/{id}")
+	public String addShow(@PathVariable Long id, ModelMap map, RedirectAttributes attributes, HttpSession session) {
+		return userService.addShow(id, map, attributes, session);
+	}
+
+	@PostMapping("/add-show")
+	public String addShow(@Valid ShowDto showDto, BindingResult result, RedirectAttributes attributes,
+			HttpSession session) {
+		return userService.addShow(showDto, result, attributes, session);
+	}
 }

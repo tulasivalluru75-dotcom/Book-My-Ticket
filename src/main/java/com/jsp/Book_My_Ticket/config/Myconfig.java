@@ -1,6 +1,8 @@
 package com.jsp.Book_My_Ticket.config;
 
 import java.security.SecureRandom;
+
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -17,8 +19,8 @@ public class Myconfig {
 	SecureRandom random() {
 		return new SecureRandom();
 	}
-	
-	@Bean
+	@SuppressWarnings("removal")
+	@Bean                                                                               
 	RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
 		RedisTemplate<String, Object> template = new RedisTemplate<>();
 		template.setConnectionFactory(connectionFactory);
