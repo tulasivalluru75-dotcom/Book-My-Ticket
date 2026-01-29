@@ -1,6 +1,8 @@
 package com.jsp.Book_My_Ticket.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -78,9 +80,23 @@ public interface UserService {
 
 	String manageShows(Long id, ModelMap map, RedirectAttributes attributes, HttpSession session);
 
-	String addShow(Long id, ModelMap map, RedirectAttributes attributes, HttpSession session);
+	String addShow(@Valid Long id, ModelMap map, RedirectAttributes attributes, HttpSession session);
 
-	String addShow(ShowDto showDto, BindingResult result, RedirectAttributes attributes, HttpSession session);
+	String addShow(ShowDto showDto, BindingResult result, RedirectAttributes attributes, HttpSession session, ModelMap map);
 
 	String loadMain(ModelMap map);
+
+	String bookMovie(Long id, HttpSession session, RedirectAttributes attributes, ModelMap map);
+
+	String deleteMovie(Long id, HttpSession session, RedirectAttributes attributes);
+
+	String deleteShow(Long id, HttpSession session, RedirectAttributes attributes);
+
+	String displayShowsOnDate(LocalDate date, Long movieId, RedirectAttributes attributes, ModelMap map);
+
+	String confirmBooking(Long showId, Long[] seatIds, HttpSession session, ModelMap map,
+			RedirectAttributes attributes);
+
+	String showSeats(Long id, HttpSession session, RedirectAttributes attributes, ModelMap map);
+	
 	}

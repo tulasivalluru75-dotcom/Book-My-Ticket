@@ -1,6 +1,7 @@
 package com.jsp.Book_My_Ticket.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -209,7 +210,12 @@ public class UserController {
 			HttpSession session) {
 		return userService.addMovie(movieDto, result, attributes, session);
 	}
-
+	
+	@GetMapping("/delete-movie/{id}")
+	public String deleteMovie(@PathVariable Long id, HttpSession session, RedirectAttributes attributes) {
+		return userService.deleteMovie(id, session, attributes);
+	}
+	
 	@GetMapping("/manage-shows/{id}")
 	public String manageShows(@PathVariable Long id, ModelMap map, RedirectAttributes attributes, HttpSession session) {
 		return userService.manageShows(id, map, attributes, session);
@@ -222,7 +228,37 @@ public class UserController {
 
 	@PostMapping("/add-show")
 	public String addShow(@Valid ShowDto showDto, BindingResult result, RedirectAttributes attributes,
-			HttpSession session) {
-		return userService.addShow(showDto, result, attributes, session);
+			HttpSession session, ModelMap map) {
+		return userService.addShow(showDto, result, attributes, session, map);
 	}
+
+	
+	@GetMapping("/book/movie/{id}")
+	public String bookMovie(@PathVariable Long id,HttpSession session, RedirectAttributes attributes,ModelMap map) {
+		return userService.bookMovie(id, session, attributes, map);
+		
+	}
+	@GetMapping("/delete-show/{id}")
+	public String deleteShow(@PathVariable Long id, RedirectAttributes attributes, HttpSession session) {
+		return userService.deleteShow(id, session, attributes);
+	}
+
+	@GetMapping("/selectShows")
+	public String displayShows(@RequestParam Long movieId, @RequestParam LocalDate date, RedirectAttributes attributes,
+			ModelMap map) {
+		return userService.displayShowsOnDate(date, movieId, attributes, map);
+	}
+
+	@GetMapping("/show-seats/{id}")
+	public String showSeats(@PathVariable Long id, HttpSession session, RedirectAttributes attributes, ModelMap map) {
+		return userService.showSeats(id, session, attributes, map);
+	}
+
+	@PostMapping("/confirm-booking")
+	public String confirmBooking(@RequestParam Long showId, @RequestParam Long[] seatIds, HttpSession session,
+			ModelMap map, RedirectAttributes attributes) {
+		return userService.confirmBooking(showId, seatIds, session, map, attributes);
+	}
+	
+	
 }
